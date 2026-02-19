@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2026-01-28.clover",
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_dummy", {
+    apiVersion: "2026-01-28.clover" as any,
     typescript: true,
 });
 
@@ -9,7 +9,7 @@ export const PLANS = {
     starter: {
         name: "Starter",
         price: 9700, // R$97 in centavos
-        priceId: process.env.STRIPE_STARTER_PRICE_ID!,
+        priceId: process.env.STRIPE_STARTER_PRICE_ID || "price_dummy",
         features: [
             "30 vídeos por mês",
             "1 conta por plataforma",
@@ -28,7 +28,7 @@ export const PLANS = {
     pro: {
         name: "Pro",
         price: 19700, // R$197 in centavos
-        priceId: process.env.STRIPE_PRO_PRICE_ID!,
+        priceId: process.env.STRIPE_PRO_PRICE_ID || "price_dummy",
         features: [
             "100 vídeos por mês",
             "3 contas por plataforma",
@@ -47,7 +47,7 @@ export const PLANS = {
     scale: {
         name: "Scale",
         price: 39700, // R$397 in centavos
-        priceId: process.env.STRIPE_SCALE_PRICE_ID!,
+        priceId: process.env.STRIPE_SCALE_PRICE_ID || "price_dummy",
         features: [
             "Vídeos ilimitados",
             "Multi usuários",
