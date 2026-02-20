@@ -5,9 +5,9 @@ export default function PrivacyPage() {
     return (
         <div className="min-h-screen bg-gray-50/50 py-20 px-6">
             <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-border/50">
-                <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8">
+                <Link href="/signup" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8">
                     <ArrowLeft className="w-4 h-4" />
-                    Voltar para Home
+                    Voltar para Cadastro
                 </Link>
                 <h1 className="text-3xl font-bold mb-6">Política de Privacidade</h1>
                 <div className="prose prose-sm text-muted-foreground space-y-4">

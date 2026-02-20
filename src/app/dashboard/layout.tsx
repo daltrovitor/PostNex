@@ -69,7 +69,7 @@ export default function DashboardLayout({
             {/* Logo */}
             <div className="h-16 flex items-center justify-between px-4 border-b border-border/50">
                 <Link href="/dashboard" className="flex items-center gap-2 overflow-hidden">
-                    <img src="/logo3.png" alt="PostNex Logo" className="w-8 h-8 rounded-lg shrink-0 object-cover" />
+                    <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-lg shrink-0 object-cover" />
                     <AnimatePresence>
                         {(!collapsed || mobile) && (
                             <motion.span
@@ -78,7 +78,7 @@ export default function DashboardLayout({
                                 exit={{ opacity: 0, width: 0 }}
                                 className="text-base font-bold tracking-tight whitespace-nowrap"
                             >
-                                PostNex
+                                <span className="sr-only">PostNex</span>
                             </motion.span>
                         )}
                     </AnimatePresence>

@@ -36,13 +36,24 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Public routes that don't require authentication
-    const publicRoutes = ["/", "/pricing", "/login", "/signup", "/auth/callback"];
+    const publicRoutes = [
+        "/",
+        "/pricing",
+        "/login",
+        "/signup",
+        "/auth/callback",
+        "/terms",
+        "/privacy",
+    ];
     const isPublicRoute = publicRoutes.some(
         (route) => pathname === route || pathname.startsWith("/api/webhooks")
     );
 
     // If user is not authenticated and trying to access protected route
     if (!user && !isPublicRoute) {
+        if (pathname.startsWith("/api/")) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
         const url = request.nextUrl.clone();
         url.pathname = "/login";
         url.searchParams.set("redirect", pathname);

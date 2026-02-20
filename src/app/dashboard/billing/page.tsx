@@ -121,7 +121,7 @@ export default function BillingPage() {
                     <div className="p-6 border-b border-border/50">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <img src="/logo3.png" alt="PostNex Logo" className="w-10 h-10 rounded-xl object-cover" />
+                                <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-xl object-cover" />
                                 <div>
                                     <h3 className="font-semibold">
                                         Plano {currentPlan.name}

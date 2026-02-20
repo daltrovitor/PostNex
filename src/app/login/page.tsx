@@ -59,8 +59,8 @@ function LoginForm() {
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2 mb-6">
-                        <img src="/logo3.png" alt="PostNex Logo" className="w-10 h-10 rounded-xl" />
-                        <span className="text-xl font-bold tracking-tight">PostNex</span>
+                        <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-xl" />
+                        <span className="sr-only">PostNex</span>
                     </Link>
                     <h1 className="text-2xl font-bold">Bem-vindo de volta</h1>
                     <p className="text-sm text-muted-foreground mt-1">

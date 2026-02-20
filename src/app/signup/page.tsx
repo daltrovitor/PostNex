@@ -12,6 +12,7 @@ export default function SignupPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
@@ -23,6 +24,12 @@ export default function SignupPage() {
 
         if (password.length < 6) {
             setError("A senha precisa ter pelo menos 6 caracteres.");
+            setLoading(false);
+            return;
+        }
+
+        if (!acceptedTerms) {
+            setError("Você precisa aceitar os Termos de Serviço e a Política de Privacidade.");
             setLoading(false);
             return;
         }
@@ -68,8 +75,8 @@ export default function SignupPage() {
             >
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center gap-2 mb-6">
-                        <img src="/logo3.png" alt="PostNex Logo" className="w-10 h-10 rounded-xl" />
-                        <span className="text-xl font-bold tracking-tight">PostNex</span>
+                        <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-xl" />
+                        <span className="sr-only">PostNex</span>
                     </Link>
                     <h1 className="text-2xl font-bold">Crie sua conta</h1>
                     <p className="text-sm text-muted-foreground mt-1">
@@ -157,6 +164,19 @@ export default function SignupPage() {
                                     {showPassword ? <EyeOff className="w-4 h-4 text-muted-foreground" /> : <Eye className="w-4 h-4 text-muted-foreground" />}
                                 </button>
                             </div>
+                        </div>
+
+                        <div className="flex items-start gap-2 pt-2">
+                            <input
+                                type="checkbox"
+                                id="terms"
+                                checked={acceptedTerms}
+                                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                                className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary/20"
+                            />
+                            <label htmlFor="terms" className="text-sm text-muted-foreground">
+                                Eu concordo com os <Link href="/terms" className="text-primary hover:underline">Termos de Serviço</Link> e a <Link href="/privacy" className="text-primary hover:underline">Política de Privacidade</Link>.
+                            </label>
                         </div>
 
                         <button

@@ -100,8 +100,8 @@ function PricingContent() {
             <nav className="border-b border-border/50 bg-white/80 backdrop-blur-lg">
                 <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2">
-                        <img src="/logo3.png" alt="PostNex Logo" className="w-8 h-8 rounded-lg" />
-                        <span className="text-lg font-bold tracking-tight">PostNex</span>
+                        <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-lg" />
+                        <span className="sr-only">PostNex</span>
                     </Link>
                     <Link
                         href="/"
@@ -164,8 +164,8 @@ function PricingContent() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.12 }}
                             className={`relative p-8 rounded-2xl border transition-all duration-300 ${plan.popular
-                                    ? "border-primary/30 shadow-xl shadow-primary/10 scale-105 bg-white"
-                                    : "border-border/50 bg-white hover:shadow-lg"
+                                ? "border-primary/30 shadow-xl shadow-primary/10 scale-105 bg-white"
+                                : "border-border/50 bg-white hover:shadow-lg"
                                 }`}
                         >
                             {plan.popular && (
@@ -192,8 +192,8 @@ function PricingContent() {
                                 onClick={() => handleCheckout(plan.key)}
                                 disabled={loading !== null}
                                 className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all duration-300 disabled:opacity-50 ${plan.popular
-                                        ? "gradient-bg text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02]"
-                                        : "bg-gray-50 text-foreground hover:bg-gray-100 border border-border"
+                                    ? "gradient-bg text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02]"
+                                    : "bg-gray-50 text-foreground hover:bg-gray-100 border border-border"
                                     }`}
                             >
                                 {loading === plan.key ? (

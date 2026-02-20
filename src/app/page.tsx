@@ -47,8 +47,8 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <img src="/logo3.png" alt="PostNex Logo" className="w-8 h-8 rounded-lg" />
-          <span className="text-lg font-bold tracking-tight">PostNex</span>
+          <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-lg" />
+          <span className="sr-only">PostNex</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
@@ -169,7 +169,7 @@ function HeroSection() {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <a
-            href="#demo"
+            href="#features"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white border border-border text-foreground text-base font-semibold hover:bg-muted transition-all duration-300"
           >
             <Play className="w-5 h-5 text-primary" />
@@ -978,8 +978,8 @@ function Footer() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <img src="/logo3.png" alt="PostNex Logo" className="w-7 h-7 rounded-lg object-cover" />
-            <span className="text-sm font-bold">PostNex</span>
+            <img src="/logo3.png" alt="PostNex Logo" className="w-40 h-auto rounded-lg object-cover" />
+            <span className="sr-only">PostNex</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <Link href="/terms" className="hover:text-foreground transition-colors">
