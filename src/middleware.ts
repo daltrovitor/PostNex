@@ -45,9 +45,11 @@ export async function middleware(request: NextRequest) {
         "/terms",
         "/privacy",
     ];
-    const isPublicRoute = publicRoutes.some(
-        (route) => pathname === route || pathname.startsWith("/api/webhooks")
-    );
+    const isPublicRoute = publicRoutes.some((route) => pathname === route) ||
+        pathname.startsWith("/api/webhooks") ||
+        // Allow OAuth entry points and callbacks to be handled without middleware blocking
+        pathname.startsWith("/api/auth") ||
+        pathname.startsWith("/auth/callback");
 
     // If user is not authenticated and trying to access protected route
     if (!user && !isPublicRoute) {
