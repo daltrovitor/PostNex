@@ -35,16 +35,15 @@ export async function GET(
                 console.log("[oauth] youtube authUrl:", authUrl);
                 return NextResponse.redirect(authUrl);
             }
+            default: {
+                return NextResponse.json(
+                    { error: "Platform not supported" },
+                    { status: 400 }
+                );
+            }
         }
     } catch (err) {
         console.error("[api/auth] Error building auth URL:", err);
         return NextResponse.json({ error: "internal_error" }, { status: 500 });
-    }
-
-        default:
-            return NextResponse.json(
-                { error: "Platform not supported" },
-                { status: 400 }
-            );
     }
 }
