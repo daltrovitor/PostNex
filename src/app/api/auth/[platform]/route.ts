@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
+
+export const runtime = "nodejs";
 
 export async function GET(
     request: Request,
@@ -13,9 +16,31 @@ export async function GET(
         case "tiktok": {
             const clientKey = process.env.TIKTOK_CLIENT_KEY!;
             const scope = "user.info.basic,video.publish,video.upload";
-            const csrfState = Math.random().toString(36).substring(7);
-            const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientKey}&scope=${scope}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&state=${csrfState}`;
-            return NextResponse.redirect(authUrl);
+            const state = Math.random().toString(36).substring(7);
+
+            // Generate PKCE code_verifier and code_challenge (S256) using Node crypto
+            const generateVerifier = () => {
+                // 64 bytes -> base64url string (length ~86) within PKCE limits
+                return crypto.randomBytes(64).toString("base64url");
+            };
+
+            const codeVerifier = generateVerifier();
+            const codeChallenge = crypto
+                .createHash("sha256")
+                .update(codeVerifier)
+                .digest("base64url");
+
+            const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${clientKey}&scope=${scope}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
+
+            // Debug logs (remove in production)
+            console.log("[oauth][tiktok] clientKey:", clientKey);
+            console.log("[oauth][tiktok] state:", state);
+            console.log("[oauth][tiktok] authUrl:", authUrl);
+
+            const res = NextResponse.redirect(authUrl);
+            // store verifier in cookie tied to state (short lived)
+            res.cookies.set(`tiktok_cv_${state}`, codeVerifier, { httpOnly: true, path: "/", sameSite: "lax" });
+            return res;
         }
 
         case "instagram": {

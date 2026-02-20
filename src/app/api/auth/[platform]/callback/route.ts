@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ platform: string }> }
@@ -35,22 +37,49 @@ export async function GET(
         const redirectUri = `${appUrl}/api/auth/${platform}/callback`;
 
         switch (platform) {
-            case "tiktok": {
-                const tokenRes = await fetch(
-                    "https://open.tiktokapis.com/v2/oauth/token/",
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                        body: new URLSearchParams({
-                            client_key: process.env.TIKTOK_CLIENT_KEY!,
-                            client_secret: process.env.TIKTOK_CLIENT_SECRET!,
-                            code,
-                            grant_type: "authorization_code",
-                            redirect_uri: redirectUri,
-                        }),
+                case "tiktok": {
+                    // Try to retrieve PKCE verifier from cookie keyed by state
+                    const state = searchParams.get("state") || "";
+                    const cookieHeader = request.headers.get("cookie") || "";
+                    const parseCookies = (c: string) =>
+                        Object.fromEntries(
+                            c.split(";").map((pair) => {
+                                const [k, ...v] = pair.split("=");
+                                return [k?.trim(), decodeURIComponent(v.join("=") || "")];
+                            })
+                        );
+
+                    const cookies = parseCookies(cookieHeader);
+                    const codeVerifier = cookies[`tiktok_cv_${state}`];
+
+                    const bodyParams: Record<string, string> = {
+                        client_key: process.env.TIKTOK_CLIENT_KEY!,
+                        client_secret: process.env.TIKTOK_CLIENT_SECRET!,
+                        code,
+                        grant_type: "authorization_code",
+                        redirect_uri: redirectUri,
+                    };
+
+                    if (codeVerifier) {
+                        bodyParams.code_verifier = codeVerifier;
                     }
-                );
+
+                    const tokenRes = await fetch(
+                        "https://open.tiktokapis.com/v2/oauth/token/",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                            body: new URLSearchParams(bodyParams),
+                        }
+                    );
                 const tokenData = await tokenRes.json();
+
+                // If token endpoint returned an error, log details and redirect with error
+                if (!tokenData || tokenData.error || !tokenData.access_token) {
+                    console.error(`[oauth][tiktok] token exchange failed:`, tokenData);
+                    return NextResponse.redirect(`${appUrl}/dashboard/accounts?error=tiktok_token_failed`);
+                }
+
                 accessToken = tokenData.access_token;
                 refreshToken = tokenData.refresh_token || "";
                 platformUserId = tokenData.open_id;
@@ -64,6 +93,15 @@ export async function GET(
                 );
                 const userData = await userRes.json();
                 platformUsername = userData.data?.user?.display_name || platformUserId;
+                // Clear the PKCE verifier cookie after successful exchange
+                try {
+                    const res = NextResponse.redirect(`${appUrl}/dashboard/accounts?connected=${platform}`);
+                    // delete cookie by setting maxAge=0
+                    res.cookies.set(`tiktok_cv_${state}`, "", { path: "/", maxAge: 0 });
+                    return res;
+                } catch (err) {
+                    console.error("[oauth][tiktok] error clearing cookie:", err);
+                }
                 break;
             }
 
